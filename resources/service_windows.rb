@@ -44,7 +44,7 @@ action :restart do
 end
 
 action :disable do
-  nssm 'consul' do
-    action %i(stop remove)
+  windows_service 'consul' do
+    action %i(stop delete)
   end
 end
