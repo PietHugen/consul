@@ -7,7 +7,7 @@ property :group, String, default: lazy { node['consul']['service_group'] }
 property :environment, Hash, default: {}
 property :data_dir, String, default: lazy { node['consul']['config']['data_dir'] }
 property :config_dir, String, default: lazy { node['consul']['config_dir'] }
-property :nssm_params, Hash, default: lazy { node['consul']['service']['nssm_params'] }
+# property :nssm_params, Hash, default: lazy { node['consul']['service']['nssm_params'] }
 property :systemd_params, Hash, default: lazy { node['consul']['service']['systemd_params'] }
 property :program, String, default: '/usr/local/bin/consul'
 property :acl_token, String, default: lazy { node['consul']['config']['acl_master_token'] }
@@ -18,32 +18,16 @@ action_class do
 end
 
 action :enable do
-  [
-    new_resource.data_dir,
-    new_resource.config_dir,
-    ::File.dirname(new_resource.nssm_params['AppStdout']),
-    ::File.dirname(new_resource.nssm_params['AppStderr']),
-  ].uniq.compact.delete_if { |i| i.eql? '.' }.each do |dirname|
-    directory dirname do
-      recursive true
-    end
-  end
-
-  service_params = {
-    'Application' => new_resource.program,
-  }.merge(new_resource.nssm_params.select { |_k, v| v != '' })
-
-  nssm 'consul' do
-    program new_resource.program
-    args command(new_resource.config_file, new_resource.config_dir)
-    parameters service_params
-    action :install
+  windows_service 'consul' do
+    binary_path_name "\"#{new_resource.program}\" agent -config-file=\"#{new_resource.config_file}\" -config-dir=\"#{new_resource.config_dir}\""
+    startup_type :automatic
+    action :create
   end
 end
 
 action :start do
-  nssm 'consul' do
-    action :start
+  powershell_script 'consul' do
+    code 'start-service consul'
   end
 end
 

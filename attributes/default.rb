@@ -39,14 +39,14 @@ default['consul']['version'] = '1.0.7'
 default['consul']['service']['systemd_params'] = {}
 
 # Windows only
-default['consul']['service']['nssm_params'] = {
-  'AppDirectory' => data_path,
-  'AppStdout' => join_path(config_prefix_path, 'stdout.log'),
-  'AppStderr' => join_path(config_prefix_path, 'error.log'),
-  'AppRotateFiles' => 1,
-  'AppRotateOnline' => 1,
-  'AppRotateBytes' => 20_000_000,
-}
+# default['consul']['service']['nssm_params'] = {
+#   'AppDirectory' => data_path,
+#   'AppStdout' => join_path(config_prefix_path, 'stdout.log'),
+#   'AppStderr' => join_path(config_prefix_path, 'error.log'),
+#   'AppRotateFiles' => 1,
+#   'AppRotateOnline' => 1,
+#   'AppRotateBytes' => 20_000_000,
+# }
 
 default['consul']['install']['binary']['archive_url'] = 'https://releases.hashicorp.com/consul/%{version}/%{basename}'
 default['consul']['install']['binary']['archive_basename'] = nil
