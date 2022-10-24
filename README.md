@@ -1,4 +1,3 @@
-test commit
 # Consul Cookbook
 
 [![Cookbook Version](https://img.shields.io/cookbook/v/consul.svg)](https://supermarket.chef.io/cookbooks/consul)
